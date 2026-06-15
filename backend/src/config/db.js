@@ -1,6 +1,6 @@
 // ============================================================
 // Подключение к базе данных MySQL.
-// Используем пул соединений (connection pool)
+// Используем пул соединений (connection pool).
 // ============================================================
 
 const mysql = require('mysql2/promise');
@@ -14,10 +14,15 @@ const pool = mysql.createPool({
   user:     process.env.DB_USER     || 'root',
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME     || 'clinic',
-  charset: 'utf8mb4_unicode_ci',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
+});
+
+// При каждом новом соединении явно переключаем его на кодировку utf8mb4,
+// чтобы кириллица читалась правильно (иначе русские буквы ломаются).
+pool.on('connection', (connection) => {
+  connection.query("SET NAMES utf8mb4");
 });
 
 module.exports = pool;
