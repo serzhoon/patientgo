@@ -22,6 +22,11 @@ app.use(cors({
 // Разбираем JSON-тело запросов.
 app.use(express.json());
 
+// Указываем браузеру, что все ответы — в кодировке UTF-8 (чтобы кириллица не ломалась).
+app.use((req, res, next) => {
+  res.header('Content-Type', 'application/json; charset=utf-8');
+  next();
+});
 // Проверочный маршрут — удобно убедиться, что сервер жив.
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'API записи пациентов работает' });
