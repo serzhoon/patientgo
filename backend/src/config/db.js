@@ -1,7 +1,6 @@
 // ============================================================
 // Подключение к базе данных MySQL.
-// Используем пул соединений (connection pool) — это эффективнее,
-// чем открывать новое соединение на каждый запрос.
+// Используем пул соединений (connection pool)
 // ============================================================
 
 const mysql = require('mysql2/promise');
@@ -15,6 +14,7 @@ const pool = mysql.createPool({
   user:     process.env.DB_USER     || 'root',
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME     || 'clinic',
+  charset: 'utf8mb4',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
