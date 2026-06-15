@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Запись на приём к врачу</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="brand">МедЗапись<span> · поликлиника</span></div>
+    <nav>
+      <span id="userInfo"></span>
+      <button id="logoutBtn" class="btn-logout hidden">Выйти</button>
+    </nav>
+  </header>
+
+  <div class="container">
+
+    <!-- ====== Блок входа / регистрации (виден, пока не вошли) ====== -->
+    <div id="authSection" class="card" style="max-width:420px; margin:40px auto;">
+      <div class="tabs">
+        <button id="tabLogin" class="active">Вход</button>
+        <button id="tabRegister">Регистрация</button>
+      </div>
+
+      <!-- Форма входа -->
+      <div id="loginForm">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" placeholder="you@example.ru">
+        <label for="loginPassword">Пароль</label>
+        <input type="password" id="loginPassword" placeholder="••••••••">
+        <button class="btn-primary" id="loginBtn">Войти</button>
+        <div id="loginMsg" class="message"></div>
+      </div>
+
+      <!-- Форма регистрации -->
+      <div id="registerForm" class="hidden">
+        <label for="regName">ФИО</label>
+        <input type="text" id="regName" placeholder="Иванов Иван Иванович">
+        <label for="regEmail">Email</label>
+        <input type="email" id="regEmail" placeholder="you@example.ru">
+        <label for="regPhone">Телефон</label>
+        <input type="text" id="regPhone" placeholder="+7 900 000-00-00">
+        <label for="regPassword">Пароль</label>
+        <input type="password" id="regPassword" placeholder="придумайте пароль">
+        <button class="btn-primary" id="registerBtn">Зарегистрироваться</button>
+        <div id="registerMsg" class="message"></div>
+      </div>
+    </div>
+
+    <!-- ====== Блок приложения (виден после входа) ====== -->
+    <div id="appSection" class="hidden">
+
+      <!-- Запись на приём — только для пациентов -->
+      <div id="bookingCard" class="card">
+        <h2>Записаться на приём</h2>
+        <label for="doctorSelect">Врач</label>
+        <select id="doctorSelect"></select>
+        <label for="appdate">Дата</label>
+        <input type="date" id="appdate">
+        <label for="apptime">Время</label>
+        <select id="apptime">
+          <option value="09:00">09:00</option>
+          <option value="09:30">09:30</option>
+          <option value="10:00">10:00</option>
+          <option value="10:30">10:30</option>
+          <option value="11:00">11:00</option>
+          <option value="11:30">11:30</option>
+          <option value="12:00">12:00</option>
+          <option value="13:00">13:00</option>
+          <option value="13:30">13:30</option>
+          <option value="14:00">14:00</option>
+          <option value="14:30">14:30</option>
+          <option value="15:00">15:00</option>
+        </select>
+        <label for="comment">Жалоба / комментарий (необязательно)</label>
+        <textarea id="comment" placeholder="Например: головная боль третий день"></textarea>
+        <button class="btn-primary" id="bookBtn">Записаться</button>
+        <div id="bookMsg" class="message"></div>
+      </div>
+
+      <!-- Список записей -->
+      <div class="card">
+        <h2 id="apptTitle">Мои записи</h2>
+        <div id="apptList"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Сначала конфиг (адрес API), потом логика -->
+  <script src="config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

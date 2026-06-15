@@ -1,0 +1,180 @@
+/* ============================================================
+   Стили приложения «Запись пациентов на приём».
+   Спокойная клиническая палитра: белый фон, мягкий бирюзовый
+   акцент, аккуратная типографика. Один фирменный акцент.
+   ============================================================ */
+
+:root {
+  --bg: #f6f8f9;
+  --surface: #ffffff;
+  --ink: #1b2a2e;          /* основной текст */
+  --muted: #5d7178;        /* вторичный текст */
+  --accent: #0e9488;       /* бирюзовый акцент */
+  --accent-dark: #0b7268;
+  --danger: #c0392b;
+  --line: #e2e9ea;
+  --radius: 12px;
+  --shadow: 0 2px 12px rgba(20, 50, 55, 0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+/* --- Шапка --- */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+header .brand {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  letter-spacing: -0.2px;
+}
+header .brand span { color: var(--ink); font-weight: 400; }
+
+header nav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 14px;
+}
+#userInfo { color: var(--muted); }
+
+/* --- Контейнер --- */
+.container {
+  max-width: 920px;
+  margin: 28px auto;
+  padding: 0 20px;
+}
+
+/* --- Карточки --- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin-bottom: 22px;
+}
+.card h2 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+
+/* --- Формы --- */
+label {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 5px;
+  margin-top: 12px;
+}
+input, select, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  background: #fcfdfd;
+  color: var(--ink);
+}
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+  border-color: var(--accent);
+}
+textarea { resize: vertical; min-height: 60px; }
+
+/* --- Кнопки --- */
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 18px;
+  transition: background 0.15s;
+}
+.btn-primary { background: var(--accent); color: #fff; margin-top: 16px; }
+.btn-primary:hover { background: var(--accent-dark); }
+.btn-link {
+  background: none; color: var(--accent-dark);
+  padding: 4px; text-decoration: underline; font-weight: 500;
+}
+.btn-danger {
+  background: #fff; color: var(--danger);
+  border: 1px solid var(--danger); padding: 6px 12px; font-size: 13px;
+}
+.btn-danger:hover { background: var(--danger); color: #fff; }
+.btn-logout {
+  background: none; color: var(--muted);
+  border: 1px solid var(--line); padding: 6px 12px; font-size: 13px;
+}
+
+/* --- Сообщения --- */
+.message {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 14px;
+  display: none;
+}
+.message.ok    { background: #e3f5f1; color: var(--accent-dark); display: block; }
+.message.error { background: #fbe9e7; color: var(--danger);      display: block; }
+
+/* --- Таблица записей --- */
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.4px; }
+
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.badge.booked    { background: #e3f5f1; color: var(--accent-dark); }
+.badge.cancelled { background: #f0f0f0; color: #888; }
+.badge.done      { background: #eaf0fb; color: #3a5fa8; }
+
+/* --- Переключение вкладок входа/регистрации --- */
+.tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+.tabs button {
+  flex: 1; background: #eef3f3; color: var(--muted); font-weight: 600;
+}
+.tabs button.active { background: var(--accent); color: #fff; }
+
+.hidden { display: none; }
+
+.empty { color: var(--muted); font-size: 14px; padding: 14px 0; }
+
+/* --- Адаптив под телефон --- */
+@media (max-width: 600px) {
+  .container { margin: 16px auto; }
+  .card { padding: 18px; }
+  table, thead, tbody, th, td, tr { display: block; }
+  thead { display: none; }
+  td { border: none; padding: 4px 0; }
+  tr { border-bottom: 1px solid var(--line); padding: 12px 0; }
+}
