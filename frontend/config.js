@@ -9,4 +9,4 @@
 //   const API_BASE = 'https://api.ваш-домен.ru/api';
 // ============================================================
 
-const API_BASE = 'http://localhost:3000/api';
+const API_BASE = 'http://82.202.158.155:3000/api';
