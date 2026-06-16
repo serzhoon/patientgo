@@ -1,7 +1,8 @@
 # ============================================================
-# docker-compose поднимает СРАЗУ два контейнера:
-#   1) mysql   — база данных
-#   2) backend — наш Express API
+# docker-compose поднимает ТРИ контейнера:
+#   1) mysql    — база данных
+#   2) backend  — наш Express API
+#   3) frontend — веб-сервер Nginx с сайтом  
 #
 # Запуск:  docker compose up --build
 # Остановка: docker compose down
@@ -20,8 +21,6 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      # При первом запуске MySQL автоматически выполнит schema.sql
-      # и создаст таблицы + демо-данные.
       - ./backend/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
       - clinic-db-data:/var/lib/mysql
     healthcheck:
@@ -47,6 +46,15 @@ services:
       CORS_ORIGIN: "*"
     ports:
       - "3000:3000"
+
+  frontend:
+    build: ./frontend
+    container_name: clinic-frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
 
 volumes:
   clinic-db-data:
