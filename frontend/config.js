@@ -10,3 +10,8 @@
 // ============================================================
 
 const API_BASE = 'http://82.202.158.155:3000/api';
+
+const API_BASE =
+  window.location.hostname === '82.202.158.155'
+    ? '/api'
+    : SERVER_API;
