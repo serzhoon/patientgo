@@ -109,7 +109,7 @@ $('registerBtn').addEventListener('click', async () => {
 });
 // Кнопка "Войти через Госуслуги" — демонстрационная, функция не реализована
 $('gosuslugiBtn').addEventListener('click', () => {
-  showMsg('loginMsg', 'Вход через Госуслуги: функция находится в разработке.', false);
+  showMsg('loginMsg', 'Функция находится в разработке.', false);
 });
 // ============================================================
 // Вход
@@ -297,5 +297,5 @@ $('forgotSubmit').addEventListener('click', () => {
   if (!val) {
     return showMsg('forgotMsg', 'Введите телефон или email.', false);
   }
-  showMsg('forgotMsg', 'Восстановление пароля: функция находится в разработке.', false);
+  showMsg('forgotMsg', 'Функция находится в разработке.', false);
 });
