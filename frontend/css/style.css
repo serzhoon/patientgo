@@ -245,3 +245,30 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: upp
   width: auto;
 }
 .modal-close:hover { color: var(--ink); }
+
+/* Звёздочка обязательного поля */
+.req { color: var(--danger); }
+
+/* Пояснение про обязательные поля */
+.req-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 12px 0 4px;
+}
+
+/* Чекбокс согласия */
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  line-height: 1.4;
+}
+.consent input {
+  width: auto;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
