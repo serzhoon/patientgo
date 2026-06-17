@@ -299,3 +299,27 @@ $('forgotSubmit').addEventListener('click', () => {
   }
   showMsg('forgotMsg', 'Функция находится в разработке.', false);
 });
+
+// ============================================================
+// Маска телефона: +7 (___) ___-__-__
+// ============================================================
+function formatPhone(value) {
+  let digits = value.replace(/\D/g, '');
+  if (digits.length > 0) {
+    if (digits[0] === '8') digits = '7' + digits.slice(1);
+    else if (digits[0] !== '7') digits = '7' + digits;
+  }
+  digits = digits.slice(0, 11);
+
+  let result = '+7';
+  if (digits.length > 1) result += ' (' + digits.slice(1, 4);
+  if (digits.length >= 4) result += ') ' + digits.slice(4, 7);
+  if (digits.length >= 7) result += '-' + digits.slice(7, 9);
+  if (digits.length >= 9) result += '-' + digits.slice(9, 11);
+  return result;
+}
+
+// Применяем маску, пока пользователь печатает в поле телефона.
+$('regPhone').addEventListener('input', (e) => {
+  e.target.value = formatPhone(e.target.value);
+});
