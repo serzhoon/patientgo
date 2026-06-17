@@ -295,7 +295,7 @@ $('forgotModal').addEventListener('click', (e) => {
 $('forgotSubmit').addEventListener('click', () => {
   const val = $('forgotInput').value.trim();
   if (!val) {
-    return showMsg('forgotMsg', 'Введите телефон или email.', false);
+    return showMsg('forgotMsg', 'Введите email.', false);
   }
   showMsg('forgotMsg', 'Функция находится в разработке.', false);
 });
