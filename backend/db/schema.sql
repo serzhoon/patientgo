@@ -4,6 +4,7 @@
 -- ============================================================
 
 -- Создаём базу данных, если её ещё нет, и выбираем её.
+SET NAMES utf8mb4;
 CREATE DATABASE IF NOT EXISTS clinic
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
