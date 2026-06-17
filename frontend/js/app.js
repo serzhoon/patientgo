@@ -266,3 +266,36 @@ function formatDate(d) {
 
 // Минимальная дата записи — сегодня (нельзя записаться в прошлое).
 $('appdate').min = new Date().toISOString().split('T')[0];
+
+// ============================================================
+// Модальное окно "Забыли пароль" (демонстрационное)
+// ============================================================
+
+// Открыть окно по клику на ссылку.
+$('forgotLink').addEventListener('click', (e) => {
+  e.preventDefault();
+  $('forgotModal').classList.remove('hidden');
+});
+
+// Закрыть окно крестиком.
+$('forgotClose').addEventListener('click', () => {
+  $('forgotModal').classList.add('hidden');
+  $('forgotMsg').className = 'message';
+});
+
+// Закрыть окно кликом по затемнённому фону (но не по самому окну).
+$('forgotModal').addEventListener('click', (e) => {
+  if (e.target.id === 'forgotModal') {
+    $('forgotModal').classList.add('hidden');
+    $('forgotMsg').className = 'message';
+  }
+});
+
+// Кнопка "Восстановить" — функция демонстрационная.
+$('forgotSubmit').addEventListener('click', () => {
+  const val = $('forgotInput').value.trim();
+  if (!val) {
+    return showMsg('forgotMsg', 'Введите телефон или email.', false);
+  }
+  showMsg('forgotMsg', 'Восстановление пароля: функция находится в разработке.', false);
+});
