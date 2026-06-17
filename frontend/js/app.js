@@ -83,6 +83,9 @@ $('tabRegister').addEventListener('click', () => {
 $('registerBtn').addEventListener('click', async () => {
   try {
     // Проверяем введённые данные перед отправкой.
+    if (!isValidName($('regName').value.trim())) {
+      return showMsg('registerMsg', 'Введите имя и фамилию (только буквы).', false);
+    }
     if (!isValidEmail($('regEmail').value.trim())) {
       return showMsg('registerMsg', 'Введите корректный email (например ivan@mail.ru).', false);
     }
