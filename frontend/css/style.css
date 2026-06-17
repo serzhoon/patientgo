@@ -196,3 +196,52 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: upp
   margin-top: 4px;
 }
 .btn-gosuslugi:hover { background: #e3f5f1; }
+/* Ссылка "Забыли пароль" */
+.forgot-link {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 13px;
+}
+.forgot-link a {
+  color: var(--accent-dark);
+  text-decoration: none;
+}
+.forgot-link a:hover { text-decoration: underline; }
+
+/* Затемнение фона за модальным окном */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(20, 40, 45, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Само окно */
+.modal-window {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  padding: 28px;
+  width: 90%;
+  max-width: 380px;
+  position: relative;
+}
+.modal-window h2 { font-size: 18px; margin-bottom: 8px; }
+
+/* Крестик закрытия */
+.modal-close {
+  position: absolute;
+  top: 12px; right: 14px;
+  background: none;
+  border: none;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--muted);
+  padding: 0;
+  width: auto;
+}
+.modal-close:hover { color: var(--ink); }
