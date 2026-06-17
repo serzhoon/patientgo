@@ -5,7 +5,7 @@
 // присылаем его id и роль в заголовках запросов.
 // ============================================================
 
-// --- Функции проверки введённых данных (валидация) ---
+// Функции проверки введённых данных (валидация)  
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
@@ -15,6 +15,14 @@ function isValidPassword(pwd) {
 function isValidPhone(phone) {
   const digits = phone.replace(/\D/g, '');
   return digits.length === 11 && (digits[0] === '7' || digits[0] === '8');
+}
+
+// Функция проверки ФИО
+function isValidName(name) {
+  const trimmed = name.trim();
+  if (!/^[a-zA-Zа-яА-ЯёЁ\s-]+$/.test(trimmed)) return false;
+  const words = trimmed.split(/\s+/).filter(w => w.length >= 2);
+  return words.length >= 2;
 }
 
 // Текущий вошедший пользователь (в памяти страницы).
