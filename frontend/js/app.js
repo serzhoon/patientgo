@@ -82,22 +82,44 @@ $('tabRegister').addEventListener('click', () => {
 // ============================================================
 $('registerBtn').addEventListener('click', async () => {
   try {
-    // Проверяем введённые данные перед отправкой.
-    if (!isValidName($('regName').value.trim())) {
-      return showMsg('registerMsg', 'Введите имя и фамилию (только буквы).', false);
+    const lastName = $('regLastName').value.trim();
+    const firstName = $('regFirstName').value.trim();
+    const middleName = $('regMiddleName').value.trim();
+
+    // Проверка фамилии и имени (только буквы, минимум 2 символа).
+    const namePattern = /^[a-zA-Zа-яА-ЯёЁ-]{2,}$/;
+    if (!namePattern.test(lastName)) {
+      return showMsg('registerMsg', 'Введите корректную фамилию (только буквы).', false);
+    }
+    if (!namePattern.test(firstName)) {
+      return showMsg('registerMsg', 'Введите корректное имя (только буквы).', false);
+    }
+    // Отчество необязательно, но если введено — тоже только буквы.
+    if (middleName && !namePattern.test(middleName)) {
+      return showMsg('registerMsg', 'Отчество должно содержать только буквы.', false);
+    }
+    if (!$('regBirthDate').value) {
+      return showMsg('registerMsg', 'Укажите дату рождения.', false);
     }
     if (!isValidEmail($('regEmail').value.trim())) {
       return showMsg('registerMsg', 'Введите корректный email (например ivan@mail.ru).', false);
     }
     if (!isValidPhone($('regPhone').value.trim())) {
-      return showMsg('registerMsg', 'Телефон должен содержать 11 цифр и начинаться с 7 или 8.', false);
+      return showMsg('registerMsg', 'Введите телефон полностью: +7 (___) ___-__-__', false);
     }
     if (!isValidPassword($('regPassword').value)) {
       return showMsg('registerMsg', 'Пароль: минимум 8 символов, хотя бы одна буква и одна цифра.', false);
     }
+    // Проверка галочки согласия.
+    if (!$('regConsent').checked) {
+      return showMsg('registerMsg', 'Необходимо согласие на обработку персональных данных.', false);
+    }
 
     await api('/auth/register', 'POST', {
-      full_name: $('regName').value.trim(),
+      last_name: lastName,
+      first_name: firstName,
+      middle_name: middleName,
+      birth_date: $('regBirthDate').value,
       email: $('regEmail').value.trim(),
       phone: $('regPhone').value.trim(),
       password: $('regPassword').value
