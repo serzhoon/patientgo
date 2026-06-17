@@ -178,3 +178,21 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: upp
   td { border: none; padding: 4px 0; }
   tr { border-bottom: 1px solid var(--line); padding: 12px 0; }
 }
+
+/* Разделитель "или" */
+.divider {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  margin: 14px 0 4px;
+}
+
+/* Кнопка "Войти через Госуслуги" (демонстрационная) */
+.btn-gosuslugi {
+  width: 100%;
+  background: #fff;
+  color: var(--accent-dark);
+  border: 1px solid var(--accent);
+  margin-top: 4px;
+}
+.btn-gosuslugi:hover { background: #e3f5f1; }
