@@ -1,9 +1,21 @@
 // ============================================================
-// Логика фронтенда (чистый JavaScript, без фреймворков).
+// Логика фронтенда 
 // Общается с бэкендом через fetch к API_BASE (см. config.js).
 // После входа запоминаем пользователя в памяти страницы и
 // присылаем его id и роль в заголовках запросов.
 // ============================================================
+
+// --- Функции проверки введённых данных (валидация) ---
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+function isValidPassword(pwd) {
+  return pwd.length >= 8 && /[a-zA-Zа-яА-Я]/.test(pwd) && /[0-9]/.test(pwd);
+}
+function isValidPhone(phone) {
+  const digits = phone.replace(/\D/g, '');
+  return digits.length === 11 && (digits[0] === '7' || digits[0] === '8');
+}
 
 // Текущий вошедший пользователь (в памяти страницы).
 let currentUser = null;
@@ -11,7 +23,7 @@ let currentUser = null;
 // Короткая функция поиска элемента по id.
 const $ = (id) => document.getElementById(id);
 
-// --- Универсальный запрос к API ---
+//  Универсальный запрос к API 
 async function api(path, method = 'GET', body = null) {
   const headers = { 'Content-Type': 'application/json' };
 
@@ -62,6 +74,17 @@ $('tabRegister').addEventListener('click', () => {
 // ============================================================
 $('registerBtn').addEventListener('click', async () => {
   try {
+    // Проверяем введённые данные перед отправкой.
+    if (!isValidEmail($('regEmail').value.trim())) {
+      return showMsg('registerMsg', 'Введите корректный email (например ivan@mail.ru).', false);
+    }
+    if (!isValidPhone($('regPhone').value.trim())) {
+      return showMsg('registerMsg', 'Телефон должен содержать 11 цифр и начинаться с 7 или 8.', false);
+    }
+    if (!isValidPassword($('regPassword').value)) {
+      return showMsg('registerMsg', 'Пароль: минимум 8 символов, хотя бы одна буква и одна цифра.', false);
+    }
+
     await api('/auth/register', 'POST', {
       full_name: $('regName').value.trim(),
       email: $('regEmail').value.trim(),
