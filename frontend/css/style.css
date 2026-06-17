@@ -165,7 +165,7 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: upp
 }
 .tabs button.active { background: var(--accent); color: #fff; }
 
-.hidden { display: none; }
+.hidden { display: none !important; }
 
 .empty { color: var(--muted); font-size: 14px; padding: 14px 0; }
 
