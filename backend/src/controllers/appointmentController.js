@@ -47,7 +47,8 @@ async function listAppointments(req, res) {
     if (req.user.role === 'admin') {
       [rows] = await pool.query(
         `SELECT a.*, d.full_name AS doctor_name, d.specialty,
-                u.full_name AS patient_name, u.phone AS patient_phone
+                TRIM(CONCAT(u.last_name, ' ', u.first_name, ' ', COALESCE(u.middle_name, ''))) AS patient_name,
+                u.phone AS patient_phone
          FROM appointments a
          JOIN doctors d ON a.doctor_id = d.id
          JOIN users u   ON a.patient_id = u.id

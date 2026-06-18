@@ -10,6 +10,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const doctorRoutes = require('./routes/doctors');
 const appointmentRoutes = require('./routes/appointments');
+const clinicRoutes = require('./routes/clinics');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use((req, res, next) => {
   res.header('Content-Type', 'application/json; charset=utf-8');
   next();
 });
+
 // Проверочный маршрут — удобно убедиться, что сервер жив.
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'API записи пациентов работает' });
@@ -36,6 +38,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/doctors', doctorRoutes);
 app.use('/api/appointments', appointmentRoutes);
+app.use('/api', clinicRoutes);
 
 // Запуск сервера.
 const PORT = process.env.PORT || 3000;

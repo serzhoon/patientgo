@@ -9,11 +9,12 @@ const pool = require('../config/db');
 // --- Регистрация нового пациента ---
 async function register(req, res) {
   try {
-    const { full_name, email, phone, password } = req.body;
+    const { last_name, first_name, middle_name, birth_date,
+            email, phone, password, clinic_id } = req.body;
 
-    // Простая проверка, что обязательные поля заполнены.
-    if (!full_name || !email || !password) {
-      return res.status(400).json({ error: 'Заполните имя, email и пароль' });
+    // Проверка обязательных полей (отчество необязательно).
+    if (!last_name || !first_name || !birth_date || !email || !password || !clinic_id) {
+      return res.status(400).json({ error: 'Заполните все обязательные поля' });
     }
 
     // Проверяем, нет ли уже пользователя с таким email.
@@ -22,10 +23,10 @@ async function register(req, res) {
       return res.status(409).json({ error: 'Пользователь с таким email уже существует' });
     }
 
-    // Новые пользователи через регистрацию всегда получают роль 'patient'.
     const [result] = await pool.query(
-      'INSERT INTO users (full_name, email, phone, password, role) VALUES (?, ?, ?, ?, ?)',
-      [full_name, email, phone || null, password, 'patient']
+      `INSERT INTO users (last_name, first_name, middle_name, birth_date, email, phone, password, clinic_id, role)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [last_name, first_name, middle_name || null, birth_date, email, phone || null, password, clinic_id, 'patient']
     );
 
     res.status(201).json({ message: 'Регистрация успешна', userId: result.insertId });
@@ -44,9 +45,12 @@ async function login(req, res) {
       return res.status(400).json({ error: 'Введите email и пароль' });
     }
 
-    // Ищем пользователя с таким email и паролем.
+    // Имя собираем из фамилии/имени/отчества. clinic_id нужен для фильтра врачей.
     const [rows] = await pool.query(
-      'SELECT id, full_name, email, role FROM users WHERE email = ? AND password = ?',
+      `SELECT id,
+              TRIM(CONCAT(last_name, ' ', first_name, ' ', COALESCE(middle_name, ''))) AS full_name,
+              email, role, clinic_id
+       FROM users WHERE email = ? AND password = ?`,
       [email, password]
     );
 
@@ -54,8 +58,6 @@ async function login(req, res) {
       return res.status(401).json({ error: 'Неверный email или пароль' });
     }
 
-    // Возвращаем данные пользователя. Фронт их запомнит и будет
-    // присылать id и роль в заголовках следующих запросов.
     res.json({ user: rows[0] });
   } catch (e) {
     console.error(e);

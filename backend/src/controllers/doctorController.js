@@ -5,10 +5,16 @@
 
 const pool = require('../config/db');
 
-// Список всех врачей.
+// Список врачей. Можно отфильтровать по поликлинике через ?clinic_id=
 async function listDoctors(req, res) {
   try {
-    const [rows] = await pool.query('SELECT * FROM doctors ORDER BY full_name');
+    const clinicId = req.query.clinic_id;
+    let rows;
+    if (clinicId) {
+      [rows] = await pool.query('SELECT * FROM doctors WHERE clinic_id = ? ORDER BY full_name', [clinicId]);
+    } else {
+      [rows] = await pool.query('SELECT * FROM doctors ORDER BY full_name');
+    }
     res.json(rows);
   } catch (e) {
     console.error(e);
