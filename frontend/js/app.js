@@ -170,11 +170,9 @@ $('registerBtn').addEventListener('click', async () => {
       password: $('regPassword').value,
       clinic_id: $('regClinic').value
     });
-    showModal('Регистрация успешна! Сейчас вы перейдёте на страницу входа.', () => {
-      // Переключаемся на вкладку "Вход".
+     showModal('Регистрация успешна! Сейчас вы перейдёте на страницу входа.', () => {
+      clearAuthForms();
       $('tabLogin').click();
-      // Очищаем поля регистрации.
-      $('registerMsg').className = 'message';
     });
   } catch (e) {
     showMsg('registerMsg', e.message, false);
@@ -209,6 +207,7 @@ $('logoutBtn').addEventListener('click', () => {
   $('authSection').classList.remove('hidden');
   $('logoutBtn').classList.add('hidden');
   $('userInfo').textContent = '';
+  clearAuthForms();
 });
 
 // ============================================================
@@ -518,4 +517,22 @@ function showConfirm(message) {
     okBtn.onclick = () => { overlay.classList.add('hidden'); resolve(true); };
     cancelBtn.onclick = () => { overlay.classList.add('hidden'); resolve(false); };
   });
+}
+// ============================================================
+// Очистка полей форм входа и регистрации.
+// ============================================================
+function clearAuthForms() {
+  // Поля входа.
+  $('loginEmail').value = '';
+  $('loginPassword').value = '';
+  $('loginMsg').className = 'message';
+
+  // Поля регистрации.
+  ['regLastName', 'regFirstName', 'regMiddleName', 'regBirthDate',
+   'regEmail', 'regPhone', 'regPassword'].forEach(id => {
+    const el = $(id);
+    if (el) el.value = '';
+  });
+  $('regConsent').checked = false;
+  $('registerMsg').className = 'message';
 }
