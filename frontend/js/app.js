@@ -275,9 +275,13 @@ $('bookBtn').addEventListener('click', async () => {
       apptime: $('apptime').value,
       comment: $('comment').value.trim()
     });
-    showMsg('bookMsg', 'Вы успешно записаны!', true);
+    $('doctorSelect').selectedIndex = 0;
+    $('appdate').value = '';
+    $('apptime').selectedIndex = 0;
     $('comment').value = '';
+    $('bookMsg').className = 'message';
     await loadAppointments();
+    showModal('Вы успешно записаны на приём!');
   } catch (e) {
     showMsg('bookMsg', e.message, false);
   }
