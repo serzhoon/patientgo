@@ -170,7 +170,12 @@ $('registerBtn').addEventListener('click', async () => {
       password: $('regPassword').value,
       clinic_id: $('regClinic').value
     });
-    showMsg('registerMsg', 'Регистрация успешна! Теперь войдите.', true);
+    showModal('Регистрация успешна! Сейчас вы перейдёте на страницу входа.', () => {
+      // Переключаемся на вкладку "Вход".
+      $('tabLogin').click();
+      // Очищаем поля регистрации.
+      $('registerMsg').className = 'message';
+    });
   } catch (e) {
     showMsg('registerMsg', e.message, false);
   }
