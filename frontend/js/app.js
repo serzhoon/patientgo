@@ -323,7 +323,7 @@ function renderAppointments() {
     html += '<p class="empty">Ничего не найдено.</p>';
   } else {
     html += '<table><thead><tr>';
-    html += '<th>Дата</th><th>Время</th><th>Врач</th>';
+    html += '<th>Дата</th><th>Время</th><th>' + (isDoctor ? 'Симптомы' : 'Врач') + '</th>';
     if (showPatient) html += '<th>Пациент</th>';
     html += '<th>Статус</th><th></th></tr></thead><tbody>';
     rows.forEach(a => {
@@ -333,7 +333,12 @@ function renderAppointments() {
       html += '<tr>';
       html += `<td>${dateStr}</td>`;
       html += `<td>${timeStr}</td>`;
-      html += `<td>${a.doctor_name} <small style="color:var(--muted)">(${a.specialty})</small></td>`;
+      if (isDoctor) {
+        const symptoms = (a.comment && a.comment.trim()) ? a.comment : '<span style="color:var(--muted)">Симптомы не указаны</span>';
+        html += `<td>${symptoms}</td>`;
+      } else {
+        html += `<td>${a.doctor_name} <small style="color:var(--muted)">(${a.specialty})</small></td>`;
+      }
       if (showPatient) html += `<td>${a.patient_name || ''}<br><small style="color:var(--muted)">${a.patient_phone || ''}</small></td>`;
       html += `<td><span class="badge ${a.status}">${statusText}</span></td>`;
       if (a.status === 'booked' && isDoctor) {
