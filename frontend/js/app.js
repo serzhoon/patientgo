@@ -272,53 +272,103 @@ $('bookBtn').addEventListener('click', async () => {
 // ============================================================
 // Загрузка и отрисовка списка записей
 // ============================================================
-async function loadAppointments() {
-  const list = await api('/appointments');
-  const container = $('apptList');
+// Состояние поиска/сортировки и последний полученный список (чтобы фильтровать без перезапроса).
+let apptSearch = '';
+let apptSortNewFirst = false;
+let apptCache = [];
 
-  if (list.length === 0) {
+// Загружает записи с сервера и запоминает их, затем отрисовывает.
+async function loadAppointments() {
+  apptCache = await api('/appointments');
+  renderAppointments();
+}
+
+// Отрисовывает записи из кэша с учётом поиска и сортировки (без обращения к серверу).
+function renderAppointments() {
+  const container = $('apptList');
+  const isAdmin = currentUser.role === 'admin';
+  const isDoctor = currentUser.role === 'doctor';
+  const showPatient = isAdmin || isDoctor;
+  const showControls = isAdmin || isDoctor;
+
+  if (apptCache.length === 0) {
     container.innerHTML = '<p class="empty">Записей пока нет.</p>';
     return;
   }
 
-  const isAdmin = currentUser.role === 'admin';
-  const isDoctor = currentUser.role === 'doctor';
-  const showPatient = isAdmin || isDoctor;
+  let rows = apptCache.slice();
+  if (showControls && apptSearch.trim()) {
+    const q = apptSearch.trim().toLowerCase();
+    rows = rows.filter(a =>
+      (a.patient_name || '').toLowerCase().includes(q) ||
+      (a.patient_phone || '').toLowerCase().includes(q)
+    );
+  }
 
-  // Заголовок таблицы (для админа добавляем колонку пациента).
-  let html = '<table><thead><tr>';
-  html += '<th>Дата</th><th>Время</th><th>Врач</th>';
-  if (showPatient) html += '<th>Пациент</th>';
-  html += '<th>Статус</th><th></th></tr></thead><tbody>';
-
-  list.forEach(a => {
-    const dateStr = formatDate(a.appdate);
-    const timeStr = (a.apptime || '').slice(0, 5);
-    const statusText = { booked: 'активна', cancelled: 'отменена', done: 'завершена' }[a.status] || a.status;
-
-    html += '<tr>';
-    html += `<td>${dateStr}</td>`;
-    html += `<td>${timeStr}</td>`;
-    html += `<td>${a.doctor_name} <small style="color:var(--muted)">(${a.specialty})</small></td>`;
-    if (showPatient) html += `<td>${a.patient_name || ''}<br><small style="color:var(--muted)">${a.patient_phone || ''}</small></td>`;
-    html += `<td><span class="badge ${a.status}">${statusText}</span></td>`;
-
-    // Кнопку отмены показываем только для активных записей.
-    // Действия зависят от роли.
-    if (a.status === 'booked' && isDoctor) {
-      html += `<td><button class="btn-primary" style="margin-top:0;width:auto;padding:6px 12px;font-size:13px;" data-complete="${a.id}">Приём состоялся</button></td>`;
-    } else if (a.status === 'booked') {
-      html += `<td><button class="btn-danger" data-cancel="${a.id}">Отменить</button></td>`;
-    } else {
-      html += '<td></td>';
-    }
-    html += '</tr>';
+  rows.sort((a, b) => {
+    const da = (a.appdate || '') + (a.apptime || '');
+    const db = (b.appdate || '') + (b.apptime || '');
+    return apptSortNewFirst ? db.localeCompare(da) : da.localeCompare(db);
   });
 
-  html += '</tbody></table>';
+  let html = '';
+  if (showControls) {
+    html += '<div class="appt-controls">';
+    html += `<input type="text" id="apptSearchInput" placeholder="Поиск по ФИО или телефону" value="${apptSearch.replace(/"/g, '&quot;')}">`;
+    html += `<button class="btn-sort" id="apptSortBtn">${apptSortNewFirst ? 'Сначала новые' : 'Сначала старые'}</button>`;
+    html += '</div>';
+  }
+
+  if (rows.length === 0) {
+    html += '<p class="empty">Ничего не найдено.</p>';
+  } else {
+    html += '<table><thead><tr>';
+    html += '<th>Дата</th><th>Время</th><th>Врач</th>';
+    if (showPatient) html += '<th>Пациент</th>';
+    html += '<th>Статус</th><th></th></tr></thead><tbody>';
+    rows.forEach(a => {
+      const dateStr = formatDate(a.appdate);
+      const timeStr = (a.apptime || '').slice(0, 5);
+      const statusText = { booked: 'активна', cancelled: 'отменена', done: 'завершена' }[a.status] || a.status;
+      html += '<tr>';
+      html += `<td>${dateStr}</td>`;
+      html += `<td>${timeStr}</td>`;
+      html += `<td>${a.doctor_name} <small style="color:var(--muted)">(${a.specialty})</small></td>`;
+      if (showPatient) html += `<td>${a.patient_name || ''}<br><small style="color:var(--muted)">${a.patient_phone || ''}</small></td>`;
+      html += `<td><span class="badge ${a.status}">${statusText}</span></td>`;
+      if (a.status === 'booked' && isDoctor) {
+        html += `<td><button class="btn-primary" style="margin-top:0;width:auto;padding:6px 12px;font-size:13px;" data-complete="${a.id}">Приём состоялся</button></td>`;
+      } else if (a.status === 'booked') {
+        html += `<td><button class="btn-danger" data-cancel="${a.id}">Отменить</button></td>`;
+      } else {
+        html += '<td></td>';
+      }
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+  }
+
   container.innerHTML = html;
 
-// Навешиваем обработчики на кнопки отмены.
+  const input = document.getElementById('apptSearchInput');
+  if (input) {
+    input.addEventListener('input', (e) => {
+      apptSearch = e.target.value;
+      const pos = e.target.selectionStart;
+      renderAppointments();
+      const again = document.getElementById('apptSearchInput');
+      if (again) { again.focus(); again.setSelectionRange(pos, pos); }
+    });
+  }
+
+  const sortBtn = document.getElementById('apptSortBtn');
+  if (sortBtn) {
+    sortBtn.addEventListener('click', () => {
+      apptSortNewFirst = !apptSortNewFirst;
+      renderAppointments();
+    });
+  }
+
   container.querySelectorAll('[data-cancel]').forEach(btn => {
     btn.addEventListener('click', async () => {
       if (!confirm('Отменить эту запись?')) return;
@@ -331,7 +381,6 @@ async function loadAppointments() {
     });
   });
 
-  // Обработчики кнопок "Приём состоялся" (для врача).
   container.querySelectorAll('[data-complete]').forEach(btn => {
     btn.addEventListener('click', async () => {
       if (!confirm('Отметить, что приём состоялся?')) return;
@@ -344,7 +393,6 @@ async function loadAppointments() {
     });
   });
 }
-
 // Преобразование даты из формата БД (2025-06-20T00:00:00...) в ДД.ММ.ГГГГ.
 function formatDate(d) {
   if (!d) return '';
