@@ -482,3 +482,35 @@ function formatPhone(value) {
 $('regPhone').addEventListener('input', (e) => {
   e.target.value = formatPhone(e.target.value);
 });
+// ============================================================
+// Универсальные модальные окна (заменяют alert и confirm).
+// ============================================================
+
+// Уведомление с кнопкой ОК. onOk — что сделать после нажатия (необязательно).
+function showModal(message, onOk) {
+  const overlay = $('uiModal');
+  $('uiModalText').textContent = message;
+  $('uiModalCancel').style.display = 'none';
+  const okBtn = $('uiModalOk');
+  okBtn.textContent = 'ОК';
+  overlay.classList.remove('hidden');
+  okBtn.onclick = () => {
+    overlay.classList.add('hidden');
+    if (typeof onOk === 'function') onOk();
+  };
+}
+
+// Подтверждение (Да / Отмена). Возвращает промис: true если "Да".
+function showConfirm(message) {
+  return new Promise((resolve) => {
+    const overlay = $('uiModal');
+    $('uiModalText').textContent = message;
+    const cancelBtn = $('uiModalCancel');
+    cancelBtn.style.display = '';
+    const okBtn = $('uiModalOk');
+    okBtn.textContent = 'Да';
+    overlay.classList.remove('hidden');
+    okBtn.onclick = () => { overlay.classList.add('hidden'); resolve(true); };
+    cancelBtn.onclick = () => { overlay.classList.add('hidden'); resolve(false); };
+  });
+}
