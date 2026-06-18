@@ -171,7 +171,7 @@ $('registerBtn').addEventListener('click', async () => {
       clinic_id: $('regClinic').value
     });
      showModal('Регистрация успешна! Сейчас вы перейдёте на страницу входа.', () => {
-      clearAuthForms();
+      resetUiState();
       $('tabLogin').click();
     });
   } catch (e) {
@@ -207,7 +207,7 @@ $('logoutBtn').addEventListener('click', () => {
   $('authSection').classList.remove('hidden');
   $('logoutBtn').classList.add('hidden');
   $('userInfo').textContent = '';
-  clearAuthForms();
+  resetUiState();
 });
 
 // ============================================================
@@ -531,7 +531,10 @@ function showConfirm(message) {
 // ============================================================
 // Очистка полей форм входа и регистрации.
 // ============================================================
-function clearAuthForms() {
+// ============================================================
+// Полный сброс пользовательского состояния (при входе/выходе).
+// ============================================================
+function resetUiState() {
   // Поля входа.
   $('loginEmail').value = '';
   $('loginPassword').value = '';
@@ -547,7 +550,20 @@ function clearAuthForms() {
   $('registerMsg').className = 'message';
 
   // Форма записи на приём.
+  const doctorSel = $('doctorSelect');
+  if (doctorSel) doctorSel.selectedIndex = 0;
+  $('appdate').value = '';
+  $('apptime').selectedIndex = 0;
   const comment = $('comment');
   if (comment) comment.value = '';
   $('bookMsg').className = 'message';
+
+  // Окно "Забыли пароль".
+  const forgotInput = $('forgotInput');
+  if (forgotInput) forgotInput.value = '';
+  $('forgotMsg').className = 'message';
+
+  // Поиск и сортировка списка записей.
+  apptSearch = '';
+  apptSortNewFirst = false;
 }
