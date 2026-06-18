@@ -282,3 +282,23 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: upp
   margin: 8px 0 4px;
   line-height: 1.4;
 }
+
+/* Панель поиска и сортировки над списком записей */
+.appt-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.appt-controls input {
+  flex: 1;
+  min-width: 180px;
+}
+.btn-sort {
+  background: #eef3f3;
+  color: var(--accent-dark);
+  border: 1px solid var(--line);
+  white-space: nowrap;
+  width: auto;
+}
+.btn-sort:hover { background: #e3f5f1; }
