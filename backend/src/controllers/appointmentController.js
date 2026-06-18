@@ -72,7 +72,7 @@ async function listAppointments(req, res) {
         `SELECT a.*, d.full_name AS doctor_name, d.specialty
          FROM appointments a
          JOIN doctors d ON a.doctor_id = d.id
-         WHERE a.patient_id = ? AND a.status <> 'cancelled'
+         WHERE a.patient_id = ? AND a.status NOT IN ('cancelled', 'no_show')
          ORDER BY a.appdate, a.apptime`,
         [req.user.id]
       );
@@ -136,4 +136,30 @@ async function completeAppointment(req, res) {
   }
 }
 
-module.exports = { createAppointment, listAppointments, cancelAppointment, completeAppointment };
+// Отметить неявку пациента (только врач, только к себе).
+async function noShowAppointment(req, res) {
+  try {
+    const { id } = req.params;
+
+    if (req.user.role !== 'doctor') {
+      return res.status(403).json({ error: 'Только врач может отметить неявку' });
+    }
+
+    const [rows] = await pool.query('SELECT * FROM appointments WHERE id = ?', [id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Запись не найдена' });
+    }
+
+    if (rows[0].doctor_id !== req.user.doctor_id) {
+      return res.status(403).json({ error: 'Можно отмечать только записи к себе' });
+    }
+
+    await pool.query("UPDATE appointments SET status = 'no_show' WHERE id = ?", [id]);
+    res.json({ message: 'Отмечена неявка пациента' });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+}
+
+module.exports = { createAppointment, listAppointments, cancelAppointment, completeAppointment, noShowAppointment };

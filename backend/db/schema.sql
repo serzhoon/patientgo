@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS appointments (
   doctor_id    INT NOT NULL,
   appdate      DATE NOT NULL,
   apptime      TIME NOT NULL,
-  status       ENUM('booked', 'cancelled', 'done') NOT NULL DEFAULT 'booked',
+  status       ENUM('booked', 'cancelled', 'done', 'no_show') NOT NULL DEFAULT 'booked',
   comment      VARCHAR(500),
   created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_patient FOREIGN KEY (patient_id) REFERENCES users(id)   ON DELETE CASCADE,
