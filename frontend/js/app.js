@@ -245,8 +245,8 @@ async function enterApp() {
 // ============================================================
 async function loadDoctors() {
   const doctors = await api('/doctors?clinic_id=' + currentUser.clinic_id);
-  const select = $('doctorSelect');
-  select.innerHTML = '';
+   const select = $('doctorSelect');
+  select.innerHTML = '<option value="">Выберите врача</option>';
   doctors.forEach(d => {
     const opt = document.createElement('option');
     opt.value = d.id;
@@ -259,7 +259,16 @@ async function loadDoctors() {
 // Создание записи на приём
 // ============================================================
 $('bookBtn').addEventListener('click', async () => {
-  try {
+ try {
+    if (!$('doctorSelect').value) {
+      return showModal('Выберите врача.');
+    }
+    if (!$('appdate').value) {
+      return showModal('Выберите дату.');
+    }
+    if (!$('apptime').value) {
+      return showModal('Выберите время.');
+    }
     await api('/appointments', 'POST', {
       doctor_id: $('doctorSelect').value,
       appdate: $('appdate').value,
