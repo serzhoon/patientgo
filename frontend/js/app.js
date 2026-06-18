@@ -217,6 +217,7 @@ async function enterApp() {
   $('authSection').classList.add('hidden');
   $('appSection').classList.remove('hidden');
   $('logoutBtn').classList.remove('hidden');
+  $('bookMsg').className = 'message';
 
   const roleText = currentUser.role === 'admin' ? 'регистратура'
                  : currentUser.role === 'doctor' ? 'врач'
@@ -535,4 +536,9 @@ function clearAuthForms() {
   });
   $('regConsent').checked = false;
   $('registerMsg').className = 'message';
+
+  // Форма записи на приём.
+  const comment = $('comment');
+  if (comment) comment.value = '';
+  $('bookMsg').className = 'message';
 }
