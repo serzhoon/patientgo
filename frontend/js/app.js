@@ -282,11 +282,13 @@ async function loadAppointments() {
   }
 
   const isAdmin = currentUser.role === 'admin';
+  const isDoctor = currentUser.role === 'doctor';
+  const showPatient = isAdmin || isDoctor;
 
   // Заголовок таблицы (для админа добавляем колонку пациента).
   let html = '<table><thead><tr>';
   html += '<th>Дата</th><th>Время</th><th>Врач</th>';
-  if (isAdmin) html += '<th>Пациент</th>';
+  if (showPatient) html += '<th>Пациент</th>';
   html += '<th>Статус</th><th></th></tr></thead><tbody>';
 
   list.forEach(a => {
@@ -298,7 +300,7 @@ async function loadAppointments() {
     html += `<td>${dateStr}</td>`;
     html += `<td>${timeStr}</td>`;
     html += `<td>${a.doctor_name} <small style="color:var(--muted)">(${a.specialty})</small></td>`;
-    if (isAdmin) html += `<td>${a.patient_name || ''}<br><small style="color:var(--muted)">${a.patient_phone || ''}</small></td>`;
+    if (showPatient) html += `<td>${a.patient_name || ''}<br><small style="color:var(--muted)">${a.patient_phone || ''}</small></td>`;
     html += `<td><span class="badge ${a.status}">${statusText}</span></td>`;
 
     // Кнопку отмены показываем только для активных записей.
