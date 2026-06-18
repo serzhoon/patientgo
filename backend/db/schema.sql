@@ -30,6 +30,19 @@ CREATE TABLE IF NOT EXISTS clinics (
 );
 
 -- ------------------------------------------------------------
+-- Таблица врачей. Каждый врач привязан к поликлинике.
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS doctors (
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  clinic_id   INT NOT NULL,                        -- в какой поликлинике принимает
+  full_name   VARCHAR(150) NOT NULL,
+  specialty   VARCHAR(150) NOT NULL,
+  cabinet     VARCHAR(20),
+  created_at  TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_doctor_clinic FOREIGN KEY (clinic_id) REFERENCES clinics(id) ON DELETE CASCADE
+);
+
+-- ------------------------------------------------------------
 -- Таблица пользователей (пациенты и администраторы).
 -- Пациент привязан к поликлинике (clinic_id).
 -- ------------------------------------------------------------
@@ -48,19 +61,6 @@ CREATE TABLE IF NOT EXISTS users (
   created_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_user_clinic FOREIGN KEY (clinic_id) REFERENCES clinics(id) ON DELETE SET NULL,
   CONSTRAINT fk_user_doctor FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE CASCADE
-);
-
--- ------------------------------------------------------------
--- Таблица врачей. Каждый врач привязан к поликлинике.
--- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS doctors (
-  id          INT AUTO_INCREMENT PRIMARY KEY,
-  clinic_id   INT NOT NULL,                        -- в какой поликлинике принимает
-  full_name   VARCHAR(150) NOT NULL,
-  specialty   VARCHAR(150) NOT NULL,
-  cabinet     VARCHAR(20),
-  created_at  TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_doctor_clinic FOREIGN KEY (clinic_id) REFERENCES clinics(id) ON DELETE CASCADE
 );
 
 -- ------------------------------------------------------------
