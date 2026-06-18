@@ -109,4 +109,31 @@ async function cancelAppointment(req, res) {
   }
 }
 
-module.exports = { createAppointment, listAppointments, cancelAppointment };
+// Отметить приём состоявшимся (только врач, только к себе).
+async function completeAppointment(req, res) {
+  try {
+    const { id } = req.params;
+
+    if (req.user.role !== 'doctor') {
+      return res.status(403).json({ error: 'Только врач может отметить приём' });
+    }
+
+    const [rows] = await pool.query('SELECT * FROM appointments WHERE id = ?', [id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Запись не найдена' });
+    }
+
+    // Врач может отмечать только записи к себе.
+    if (rows[0].doctor_id !== req.user.doctor_id) {
+      return res.status(403).json({ error: 'Можно отмечать только записи к себе' });
+    }
+
+    await pool.query("UPDATE appointments SET status = 'done' WHERE id = ?", [id]);
+    res.json({ message: 'Приём отмечен как состоявшийся' });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+}
+
+module.exports = { createAppointment, listAppointments, cancelAppointment, completeAppointment };
