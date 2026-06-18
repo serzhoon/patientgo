@@ -54,6 +54,19 @@ async function listAppointments(req, res) {
          JOIN users u   ON a.patient_id = u.id
          ORDER BY a.appdate, a.apptime`
       );
+    } else if (req.user.role === 'doctor') {
+      // Врач видит записи к себе (активные и завершённые, без отменённых).
+      [rows] = await pool.query(
+        `SELECT a.*, d.full_name AS doctor_name, d.specialty,
+                TRIM(CONCAT(u.last_name, ' ', u.first_name, ' ', COALESCE(u.middle_name, ''))) AS patient_name,
+                u.phone AS patient_phone
+         FROM appointments a
+         JOIN doctors d ON a.doctor_id = d.id
+         JOIN users u   ON a.patient_id = u.id
+         WHERE a.doctor_id = ? AND a.status <> 'cancelled'
+         ORDER BY a.appdate, a.apptime`,
+        [req.user.doctor_id]
+      );
     } else {
       [rows] = await pool.query(
         `SELECT a.*, d.full_name AS doctor_name, d.specialty

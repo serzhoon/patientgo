@@ -45,11 +45,12 @@ async function login(req, res) {
       return res.status(400).json({ error: 'Введите email и пароль' });
     }
 
-    // Имя собираем из фамилии/имени/отчества. clinic_id нужен для фильтра врачей.
+    // Имя собираем из фамилии/имени/отчества. clinic_id нужен пациенту для фильтра врачей,
+    // doctor_id нужен врачу, чтобы показать записи к нему.
     const [rows] = await pool.query(
       `SELECT id,
               TRIM(CONCAT(last_name, ' ', first_name, ' ', COALESCE(middle_name, ''))) AS full_name,
-              email, role, clinic_id
+              email, role, clinic_id, doctor_id
        FROM users WHERE email = ? AND password = ?`,
       [email, password]
     );

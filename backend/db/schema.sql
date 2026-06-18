@@ -38,14 +38,16 @@ CREATE TABLE IF NOT EXISTS users (
   last_name    VARCHAR(80)  NOT NULL,             -- фамилия
   first_name   VARCHAR(80)  NOT NULL,             -- имя
   middle_name  VARCHAR(80),                        -- отчество (необязательно)
-  birth_date   DATE         NOT NULL,             -- дата рождения
+  birth_date   DATE,                               -- дата рождения (для пациентов)
   email        VARCHAR(150) NOT NULL UNIQUE,
   phone        VARCHAR(30),
   password     VARCHAR(150) NOT NULL,              -- пароль (учебный проект, хранится как текст)
   clinic_id    INT,                                -- к какой поликлинике привязан пациент
-  role         ENUM('patient', 'admin') NOT NULL DEFAULT 'patient',
+  doctor_id    INT,                                -- если это аккаунт врача — ссылка на его карточку
+  role         ENUM('patient', 'admin', 'doctor') NOT NULL DEFAULT 'patient',
   created_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_user_clinic FOREIGN KEY (clinic_id) REFERENCES clinics(id) ON DELETE SET NULL
+  CONSTRAINT fk_user_clinic FOREIGN KEY (clinic_id) REFERENCES clinics(id) ON DELETE SET NULL,
+  CONSTRAINT fk_user_doctor FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE CASCADE
 );
 
 -- ------------------------------------------------------------
@@ -116,4 +118,29 @@ INSERT INTO doctors (clinic_id, full_name, specialty, cabinet) VALUES
 
 -- Администратор регистратуры. Логин: admin@clinic.ru   Пароль: admin123
 INSERT INTO users (last_name, first_name, middle_name, birth_date, email, phone, password, clinic_id, role) VALUES
-  ('Администратор', 'Регистратуры', NULL, '1990-01-01', 'admin@clinic.ru', '+70000000000', 'admin123', NULL, 'admin');
+  ('Администратор', 'Регистратуры', NULL, NULL, 'admin@clinic.ru', '+70000000000', 'admin123', NULL, 'admin');
+
+-- ------------------------------------------------------------
+-- Аккаунты врачей (заводит системный администратор).
+-- doctor_id ссылается на карточку врача в таблице doctors (id 1..15
+-- в порядке вставки выше). Логин: фамилия@clinic.ru, пароль: Фамилия2025.
+-- ------------------------------------------------------------
+INSERT INTO users (last_name, first_name, middle_name, email, phone, password, doctor_id, role) VALUES
+  -- Поликлиника №1
+  ('Иванова',  'Анна',    'Сергеевна',   'ivanova@clinic.ru',  NULL, 'Ivanova2025',  1,  'doctor'),
+  ('Петров',   'Михаил',  'Олегович',    'petrov@clinic.ru',   NULL, 'Petrov2025',   2,  'doctor'),
+  ('Сидорова', 'Елена',   'Павловна',    'sidorova@clinic.ru', NULL, 'Sidorova2025', 3,  'doctor'),
+  ('Кузнецов', 'Дмитрий', 'Игоревич',    'kuznetsov@clinic.ru',NULL, 'Kuznetsov2025',4,  'doctor'),
+  ('Морозова', 'Ольга',   'Викторовна',  'morozova@clinic.ru', NULL, 'Morozova2025', 5,  'doctor'),
+  -- Поликлиника №2
+  ('Васильев', 'Андрей',  'Николаевич',  'vasilev@clinic.ru',  NULL, 'Vasilev2025',  6,  'doctor'),
+  ('Григорьева','Мария',  'Алексеевна',  'grigoreva@clinic.ru',NULL, 'Grigoreva2025',7,  'doctor'),
+  ('Соколов',  'Павел',   'Дмитриевич',  'sokolov@clinic.ru',  NULL, 'Sokolov2025',  8,  'doctor'),
+  ('Лебедева', 'Татьяна', 'Сергеевна',   'lebedeva@clinic.ru', NULL, 'Lebedeva2025', 9,  'doctor'),
+  ('Новиков',  'Сергей',  'Владимирович','novikov@clinic.ru',  NULL, 'Novikov2025',  10, 'doctor'),
+  -- Поликлиника №3
+  ('Фёдорова', 'Ирина',   'Анатольевна', 'fedorova@clinic.ru', NULL, 'Fedorova2025', 11, 'doctor'),
+  ('Михайлов', 'Виктор',  'Петрович',    'mihaylov@clinic.ru', NULL, 'Mihaylov2025', 12, 'doctor'),
+  ('Алексеева','Наталья', 'Игоревна',    'alekseeva@clinic.ru',NULL, 'Alekseeva2025',13, 'doctor'),
+  ('Захаров',  'Олег',    'Геннадьевич', 'zaharov@clinic.ru',  NULL, 'Zaharov2025',  14, 'doctor'),
+  ('Романова', 'Светлана','Юрьевна',     'romanova@clinic.ru', NULL, 'Romanova2025', 15, 'doctor');

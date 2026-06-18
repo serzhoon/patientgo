@@ -14,12 +14,17 @@
 function authRequired(req, res, next) {
   const id = req.headers['x-user-id'];
   const role = req.headers['x-user-role'];
+  const doctorId = req.headers['x-doctor-id']; // для роли "врач" — его карточка
 
   if (!id) {
     return res.status(401).json({ error: 'Требуется вход' });
   }
 
-  req.user = { id: Number(id), role: role || 'patient' };
+  req.user = {
+    id: Number(id),
+    role: role || 'patient',
+    doctor_id: doctorId ? Number(doctorId) : null
+  };
   next();
 }
 
