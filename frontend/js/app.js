@@ -164,7 +164,8 @@ $('registerBtn').addEventListener('click', async () => {
       birth_date: $('regBirthDate').value,
       email: $('regEmail').value.trim(),
       phone: $('regPhone').value.trim(),
-      password: $('regPassword').value
+      password: $('regPassword').value,
+      clinic_id: $('regClinic').value
     });
     showMsg('registerMsg', 'Регистрация успешна! Теперь войдите.', true);
   } catch (e) {
