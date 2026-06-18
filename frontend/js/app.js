@@ -329,7 +329,7 @@ function renderAppointments() {
     rows.forEach(a => {
       const dateStr = formatDate(a.appdate);
       const timeStr = (a.apptime || '').slice(0, 5);
-      const statusText = { booked: 'активна', cancelled: 'отменена', done: 'завершена' }[a.status] || a.status;
+      const statusText = { booked: 'активна', cancelled: 'отменена', done: 'завершена', no_show: 'неявка' }[a.status] || a.status;
       html += '<tr>';
       html += `<td>${dateStr}</td>`;
       html += `<td>${timeStr}</td>`;
@@ -342,7 +342,10 @@ function renderAppointments() {
       if (showPatient) html += `<td>${a.patient_name || ''}<br><small style="color:var(--muted)">${a.patient_phone || ''}</small></td>`;
       html += `<td><span class="badge ${a.status}">${statusText}</span></td>`;
       if (a.status === 'booked' && isDoctor) {
-        html += `<td><button class="btn-primary" style="margin-top:0;width:auto;padding:6px 12px;font-size:13px;" data-complete="${a.id}">Приём состоялся</button></td>`;
+        html += `<td>
+          <button class="btn-primary" style="margin-top:0;width:auto;padding:6px 12px;font-size:13px;margin-right:6px;" data-complete="${a.id}">Приём состоялся</button>
+          <button class="btn-danger" style="padding:6px 12px;font-size:13px;" data-noshow="${a.id}">Пациент не явился</button>
+        </td>`;
       } else if (a.status === 'booked') {
         html += `<td><button class="btn-danger" data-cancel="${a.id}">Отменить</button></td>`;
       } else {
