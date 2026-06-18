@@ -59,7 +59,7 @@ async function listAppointments(req, res) {
         `SELECT a.*, d.full_name AS doctor_name, d.specialty
          FROM appointments a
          JOIN doctors d ON a.doctor_id = d.id
-         WHERE a.patient_id = ?
+         WHERE a.patient_id = ? AND a.status <> 'cancelled'
          ORDER BY a.appdate, a.apptime`,
         [req.user.id]
       );

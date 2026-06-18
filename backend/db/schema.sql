@@ -74,8 +74,7 @@ CREATE TABLE IF NOT EXISTS appointments (
   comment      VARCHAR(500),
   created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_patient FOREIGN KEY (patient_id) REFERENCES users(id)   ON DELETE CASCADE,
-  CONSTRAINT fk_doctor  FOREIGN KEY (doctor_id)  REFERENCES doctors(id) ON DELETE CASCADE,
-  UNIQUE KEY uniq_doctor_slot (doctor_id, appdate, apptime)
+  CONSTRAINT fk_doctor  FOREIGN KEY (doctor_id)  REFERENCES doctors(id) ON DELETE CASCADE
 );
 
 -- ============================================================
