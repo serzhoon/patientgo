@@ -254,6 +254,48 @@ async function loadDoctors() {
     select.appendChild(opt);
   });
 }
+// Загрузка свободных слотов времени для выбранного врача и даты.
+async function loadFreeSlots() {
+  const doctorId = $('doctorSelect').value;
+  const date = $('appdate').value;
+  const timeSelect = $('apptime');
+
+  // Пока не выбраны врач и дата — список пуст.
+  if (!doctorId || !date) {
+    timeSelect.innerHTML = '<option value="">Сначала выберите врача и дату</option>';
+    return;
+  }
+
+  // Проверка на выходной.
+  const day = new Date(date).getDay(); // 0 = воскресенье, 6 = суббота
+  if (day === 0 || day === 6) {
+    timeSelect.innerHTML = '<option value="">Запись только в будни</option>';
+    showModal('Запись возможна только в будние дни.');
+    $('appdate').value = '';
+    return;
+  }
+
+  try {
+    const slots = await api('/appointments/free-slots?doctor_id=' + doctorId + '&appdate=' + date);
+    if (slots.length === 0) {
+      timeSelect.innerHTML = '<option value="">Свободного времени нет</option>';
+    } else {
+      timeSelect.innerHTML = '<option value="">Выберите время</option>';
+      slots.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        timeSelect.appendChild(opt);
+      });
+    }
+  } catch (e) {
+    showModal(e.message);
+  }
+}
+
+// При смене врача или даты — обновляем свободное время.
+$('doctorSelect').addEventListener('change', loadFreeSlots);
+$('appdate').addEventListener('change', loadFreeSlots);
 
 // ============================================================
 // Создание записи на приём
@@ -442,7 +484,14 @@ function formatDate(d) {
 }
 
 // Минимальная дата записи — сегодня (нельзя записаться в прошлое).
-$('appdate').min = new Date().toISOString().split('T')[0];
+// Дата записи: от сегодня до +14 дней.
+(function () {
+  const today = new Date();
+  const max = new Date();
+  max.setDate(today.getDate() + 14);
+  $('appdate').min = today.toISOString().split('T')[0];
+  $('appdate').max = max.toISOString().split('T')[0];
+})();
 
 // ============================================================
 // Модальное окно "Забыли пароль" (демонстрационное)
