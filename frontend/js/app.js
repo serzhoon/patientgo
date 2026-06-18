@@ -304,7 +304,10 @@ async function loadAppointments() {
     html += `<td><span class="badge ${a.status}">${statusText}</span></td>`;
 
     // Кнопку отмены показываем только для активных записей.
-    if (a.status === 'booked') {
+    // Действия зависят от роли.
+    if (a.status === 'booked' && isDoctor) {
+      html += `<td><button class="btn-primary" style="margin-top:0;width:auto;padding:6px 12px;font-size:13px;" data-complete="${a.id}">Приём состоялся</button></td>`;
+    } else if (a.status === 'booked') {
       html += `<td><button class="btn-danger" data-cancel="${a.id}">Отменить</button></td>`;
     } else {
       html += '<td></td>';
@@ -315,12 +318,25 @@ async function loadAppointments() {
   html += '</tbody></table>';
   container.innerHTML = html;
 
-  // Навешиваем обработчики на кнопки отмены.
+// Навешиваем обработчики на кнопки отмены.
   container.querySelectorAll('[data-cancel]').forEach(btn => {
     btn.addEventListener('click', async () => {
       if (!confirm('Отменить эту запись?')) return;
       try {
         await api('/appointments/' + btn.dataset.cancel + '/cancel', 'PATCH');
+        await loadAppointments();
+      } catch (e) {
+        alert(e.message);
+      }
+    });
+  });
+
+  // Обработчики кнопок "Приём состоялся" (для врача).
+  container.querySelectorAll('[data-complete]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Отметить, что приём состоялся?')) return;
+      try {
+        await api('/appointments/' + btn.dataset.complete + '/complete', 'PATCH');
         await loadAppointments();
       } catch (e) {
         alert(e.message);
