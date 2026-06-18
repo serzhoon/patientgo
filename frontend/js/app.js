@@ -214,7 +214,9 @@ async function enterApp() {
   $('appSection').classList.remove('hidden');
   $('logoutBtn').classList.remove('hidden');
 
-  const roleText = currentUser.role === 'admin' ? 'регистратура' : 'пациент';
+  const roleText = currentUser.role === 'admin' ? 'регистратура'
+                 : currentUser.role === 'doctor' ? 'врач'
+                 : 'пациент';
   $('userInfo').textContent = `${currentUser.full_name} (${roleText})`;
 
   // Распределяем, что показывать по ролям.
