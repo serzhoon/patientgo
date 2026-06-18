@@ -384,7 +384,7 @@ function renderAppointments() {
 
   container.querySelectorAll('[data-cancel]').forEach(btn => {
     btn.addEventListener('click', async () => {
-      if (!confirm('Отменить эту запись?')) return;
+        if (!await showConfirm('Отменить эту запись?')) return;
       try {
         await api('/appointments/' + btn.dataset.cancel + '/cancel', 'PATCH');
         await loadAppointments();
@@ -396,7 +396,7 @@ function renderAppointments() {
 
   container.querySelectorAll('[data-complete]').forEach(btn => {
     btn.addEventListener('click', async () => {
-      if (!confirm('Отметить, что приём состоялся?')) return;
+      if (!await showConfirm('Отметить, что приём состоялся?')) return;
       try {
         await api('/appointments/' + btn.dataset.complete + '/complete', 'PATCH');
         await loadAppointments();
@@ -408,7 +408,7 @@ function renderAppointments() {
 
   container.querySelectorAll('[data-noshow]').forEach(btn => {
     btn.addEventListener('click', async () => {
-      if (!confirm('Отметить, что пациент не явился?')) return;
+      if (!await showConfirm('Отметить, что пациент не явился?')) return;
       try {
         await api('/appointments/' + btn.dataset.noshow + '/noshow', 'PATCH');
         await loadAppointments();
