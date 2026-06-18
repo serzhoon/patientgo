@@ -6,11 +6,13 @@ const {
   listAppointments,
   cancelAppointment,
   completeAppointment,
-  noShowAppointment
+  noShowAppointment,
+  freeSlots
 } = require('../controllers/appointmentController');
 const { authRequired } = require('../middleware/auth');
 
 // Все операции с записями требуют авторизации.
+router.get('/free-slots', authRequired, freeSlots);              // свободные слоты врача на дату
 router.post('/', authRequired, createAppointment);                // создать запись
 router.get('/', authRequired, listAppointments);                  // список записей
 router.patch('/:id/cancel', authRequired, cancelAppointment);     // отменить запись

@@ -7,6 +7,35 @@
 const pool = require('../config/db');
 
 // Создать запись на приём (пациент).
+// Стандартные слоты времени приёма (одинаковые для всех врачей).
+const ALL_SLOTS = ['09:00','09:30','10:00','10:30','11:00','11:30','12:00',
+                   '13:00','13:30','14:00','14:30','15:00'];
+
+// Вернуть свободные слоты врача на конкретную дату (занятые исключаются).
+async function freeSlots(req, res) {
+  try {
+    const { doctor_id, appdate } = req.query;
+    if (!doctor_id || !appdate) {
+      return res.status(400).json({ error: 'Нужны врач и дата' });
+    }
+
+    // Занятые слоты этого врача на эту дату (активные записи).
+    const [busy] = await pool.query(
+      `SELECT apptime FROM appointments
+       WHERE doctor_id = ? AND appdate = ? AND status = 'booked'`,
+      [doctor_id, appdate]
+    );
+    const busyTimes = busy.map(r => (r.apptime || '').slice(0, 5));
+
+    // Оставляем только свободные.
+    const free = ALL_SLOTS.filter(s => !busyTimes.includes(s));
+    res.json(free);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+}
+
 async function createAppointment(req, res) {
   try {
     const { doctor_id, appdate, apptime, comment } = req.body;
@@ -162,4 +191,4 @@ async function noShowAppointment(req, res) {
   }
 }
 
-module.exports = { createAppointment, listAppointments, cancelAppointment, completeAppointment, noShowAppointment };
+module.exports = { createAppointment, listAppointments, cancelAppointment, completeAppointment, noShowAppointment, freeSlots };
