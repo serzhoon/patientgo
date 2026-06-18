@@ -389,7 +389,7 @@ function renderAppointments() {
         await api('/appointments/' + btn.dataset.cancel + '/cancel', 'PATCH');
         await loadAppointments();
       } catch (e) {
-        alert(e.message);
+         showModal(e.message);
       }
     });
   });
@@ -401,7 +401,7 @@ function renderAppointments() {
         await api('/appointments/' + btn.dataset.complete + '/complete', 'PATCH');
         await loadAppointments();
       } catch (e) {
-        alert(e.message);
+         showModal(e.message);
       }
     });
   });
@@ -413,7 +413,7 @@ function renderAppointments() {
         await api('/appointments/' + btn.dataset.noshow + '/noshow', 'PATCH');
         await loadAppointments();
       } catch (e) {
-        alert(e.message);
+         showModal(e.message);
       }
     });
   });
