@@ -400,6 +400,18 @@ function renderAppointments() {
       }
     });
   });
+
+  container.querySelectorAll('[data-noshow]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Отметить, что пациент не явился?')) return;
+      try {
+        await api('/appointments/' + btn.dataset.noshow + '/noshow', 'PATCH');
+        await loadAppointments();
+      } catch (e) {
+        alert(e.message);
+      }
+    });
+  });
 }
 // Преобразование даты из формата БД (2025-06-20T00:00:00...) в ДД.ММ.ГГГГ.
 function formatDate(d) {
