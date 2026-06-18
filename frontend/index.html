@@ -112,6 +112,16 @@
     </div>
 
   </div>
+   <!-- Универсальное модальное окно (уведомления и подтверждения) -->
+  <div id="uiModal" class="modal-overlay hidden">
+    <div class="modal-window">
+      <p id="uiModalText" style="margin-bottom:20px;font-size:15px;"></p>
+      <div style="display:flex;gap:10px;justify-content:flex-end;">
+        <button class="btn-logout" id="uiModalCancel">Отмена</button>
+        <button class="btn-primary" id="uiModalOk" style="width:auto;margin-top:0;">ОК</button>
+      </div>
+    </div>
+  </div>
   <!-- Модальное окно "Забыли пароль"  -->
   <div id="forgotModal" class="modal-overlay hidden">
     <div class="modal-window">
