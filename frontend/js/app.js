@@ -36,9 +36,12 @@ async function api(path, method = 'GET', body = null) {
   const headers = { 'Content-Type': 'application/json' };
 
   // Если пользователь вошёл — сообщаем серверу, кто он.
-  if (currentUser) {
+ if (currentUser) {
     headers['x-user-id'] = currentUser.id;
     headers['x-user-role'] = currentUser.role;
+    if (currentUser.doctor_id) {
+      headers['x-doctor-id'] = currentUser.doctor_id;
+    }
   }
 
   const res = await fetch(API_BASE + path, {
@@ -214,10 +217,13 @@ async function enterApp() {
   const roleText = currentUser.role === 'admin' ? 'регистратура' : 'пациент';
   $('userInfo').textContent = `${currentUser.full_name} (${roleText})`;
 
-  // Админу не нужна форма записи — он только смотрит все записи.
+  // Распределяем, что показывать по ролям.
   if (currentUser.role === 'admin') {
     $('bookingCard').classList.add('hidden');
     $('apptTitle').textContent = 'Все записи пациентов';
+  } else if (currentUser.role === 'doctor') {
+    $('bookingCard').classList.add('hidden');
+    $('apptTitle').textContent = 'Записи на приём ко мне';
   } else {
     $('bookingCard').classList.remove('hidden');
     $('apptTitle').textContent = 'Мои записи';
