@@ -75,7 +75,49 @@ $('tabRegister').addEventListener('click', () => {
   $('tabLogin').classList.remove('active');
   $('registerForm').classList.remove('hidden');
   $('loginForm').classList.add('hidden');
+   loadCitiesAndClinics();
 });
+
+// Загружаем города и поликлиники для формы регистрации (один раз).
+let clinicsLoaded = false;
+async function loadCitiesAndClinics() {
+  if (clinicsLoaded) return;
+  try {
+    // Города
+    const cities = await api('/cities');
+    const citySelect = $('regCity');
+    citySelect.innerHTML = '';
+    cities.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = c.name;
+      citySelect.appendChild(opt);
+    });
+
+    // Поликлиники выбранного города
+    await loadClinicsForCity();
+
+    // При смене города — перезагрузить поликлиники
+    citySelect.addEventListener('change', loadClinicsForCity);
+
+    clinicsLoaded = true;
+  } catch (e) {
+    showMsg('registerMsg', 'Не удалось загрузить список поликлиник.', false);
+  }
+}
+
+async function loadClinicsForCity() {
+  const cityId = $('regCity').value;
+  const clinics = await api('/clinics?city_id=' + cityId);
+  const clinicSelect = $('regClinic');
+  clinicSelect.innerHTML = '';
+  clinics.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = c.name;
+    clinicSelect.appendChild(opt);
+  });
+}
 
 // ============================================================
 // Регистрация
