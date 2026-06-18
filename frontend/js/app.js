@@ -231,7 +231,7 @@ async function enterApp() {
 // Загрузка списка врачей в выпадающий список
 // ============================================================
 async function loadDoctors() {
-  const doctors = await api('/doctors');
+  const doctors = await api('/doctors?clinic_id=' + currentUser.clinic_id);
   const select = $('doctorSelect');
   select.innerHTML = '';
   doctors.forEach(d => {
