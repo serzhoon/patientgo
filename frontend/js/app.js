@@ -399,6 +399,7 @@ function renderAppointments() {
     html += '<table><thead><tr>';
     html += '<th>Дата</th><th>Время</th><th>' + (isDoctor ? 'Симптомы' : 'Врач') + '</th>';
     if (showPatient) html += '<th>Пациент</th>';
+    if (isAdmin) html += '<th>Симптомы</th><th>Записан</th>';
     html += '<th>Статус</th><th></th></tr></thead><tbody>';
     rows.forEach(a => {
       const dateStr = formatDate(a.appdate);
@@ -414,6 +415,11 @@ function renderAppointments() {
         html += `<td>${a.doctor_name} <small style="color:var(--muted)">(${a.specialty})</small></td>`;
       }
       if (showPatient) html += `<td>${a.patient_name || ''}<br><small style="color:var(--muted)">${a.patient_phone || ''}</small></td>`;
+      if (isAdmin) {
+        const symptoms = (a.comment && a.comment.trim()) ? a.comment : '<span style="color:var(--muted)">не указаны</span>';
+        html += `<td>${symptoms}</td>`;
+        html += `<td><small>${formatDateTime(a.created_at)}</small></td>`;
+      }
       html += `<td><span class="badge ${a.status}">${statusText}</span></td>`;
       if (a.status === 'booked' && isDoctor) {
         html += `<td>
