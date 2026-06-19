@@ -380,6 +380,11 @@ function renderAppointments() {
     );
   }
 
+  // Фильтр по дате приёма (только у врача).
+  if (isDoctor && apptDateFilter) {
+    rows = rows.filter(a => (a.appdate || '').slice(0, 10) === apptDateFilter);
+  }
+  
   rows.sort((a, b) => {
     const da = (a.appdate || '') + (a.apptime || '');
     const db = (b.appdate || '') + (b.apptime || '');
@@ -387,9 +392,13 @@ function renderAppointments() {
   });
 
   let html = '';
-  if (showControls) {
+ if (showControls) {
     html += '<div class="appt-controls">';
     html += `<input type="text" id="apptSearchInput" placeholder="Поиск по ФИО или телефону" value="${apptSearch.replace(/"/g, '&quot;')}">`;
+    if (isDoctor) {
+      html += `<input type="date" id="apptDateInput" value="${apptDateFilter}">`;
+      html += `<button class="btn-sort" id="apptDateReset">Все дни</button>`;
+    }
     html += `<button class="btn-sort" id="apptSortBtn">${apptSortNewFirst ? 'Сначала новые' : 'Сначала старые'}</button>`;
     html += '</div>';
   }
@@ -457,7 +466,21 @@ function renderAppointments() {
       renderAppointments();
     });
   }
+ const dateInput = document.getElementById('apptDateInput');
+  if (dateInput) {
+    dateInput.addEventListener('change', (e) => {
+      apptDateFilter = e.target.value;
+      renderAppointments();
+    });
+  }
 
+  const dateReset = document.getElementById('apptDateReset');
+  if (dateReset) {
+    dateReset.addEventListener('click', () => {
+      apptDateFilter = '';
+      renderAppointments();
+    });
+  }
   container.querySelectorAll('[data-cancel]').forEach(btn => {
     btn.addEventListener('click', async () => {
         if (!await showConfirm('Отменить эту запись?')) return;
