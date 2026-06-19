@@ -24,7 +24,16 @@ function isValidName(name) {
   const words = trimmed.split(/\s+/).filter(w => w.length >= 2);
   return words.length >= 2;
 }
-
+// Считает полный возраст по дате рождения и проверяет границы 18..120.
+function isValidAge(birthDate) {
+  if (!birthDate) return false;
+  const today = new Date();
+  const bd = new Date(birthDate);
+  let age = today.getFullYear() - bd.getFullYear();
+  const m = today.getMonth() - bd.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < bd.getDate())) age--;
+  return age >= 18 && age <= 120;
+}
 // Текущий вошедший пользователь (в памяти страницы).
 let currentUser = null;
 
@@ -145,6 +154,9 @@ $('registerBtn').addEventListener('click', async () => {
     }
     if (!$('regBirthDate').value) {
       return showMsg('registerMsg', 'Укажите дату рождения.', false);
+    }
+    if (!isValidAge($('regBirthDate').value)) {
+      return showMsg('registerMsg', 'Регистрация доступна с 18 лет (и не старше 120).', false);
     }
     if (!isValidEmail($('regEmail').value.trim())) {
       return showMsg('registerMsg', 'Введите корректный email (например ivan@mail.ru).', false);
