@@ -344,3 +344,14 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: upp
   padding: 24px 0 32px;
   margin-top: 24px;
 }
+
+/* Логотип в шапке: иконка + название в ряд */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-logo {
+  flex-shrink: 0;
+  border-radius: 6px;
+}
