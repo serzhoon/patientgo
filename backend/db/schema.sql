@@ -118,7 +118,7 @@ INSERT INTO doctors (clinic_id, full_name, specialty, cabinet) VALUES
 
 -- Администратор регистратуры. Логин: admin@clinic.ru   Пароль: admin123
 INSERT INTO users (last_name, first_name, middle_name, birth_date, email, phone, password, clinic_id, role) VALUES
-  ('Администратор', 'Регистратуры', NULL, NULL, 'admin@clinic.ru', '+70000000000', 'admin123', NULL, 'admin');
+  ('Администратор', 'Регистратуры', NULL, NULL, 'admin@clinic.ru', '+70000000000', 'Admin754', NULL, 'admin');
 
 -- ------------------------------------------------------------
 -- Аккаунты врачей (заводит системный администратор).
@@ -127,20 +127,20 @@ INSERT INTO users (last_name, first_name, middle_name, birth_date, email, phone,
 -- ------------------------------------------------------------
 INSERT INTO users (last_name, first_name, middle_name, email, phone, password, doctor_id, role) VALUES
   -- Поликлиника №1
-  ('Иванова',  'Анна',    'Сергеевна',   'ivanova@clinic.ru',  NULL, 'Ivanova2025',  1,  'doctor'),
-  ('Петров',   'Михаил',  'Олегович',    'petrov@clinic.ru',   NULL, 'Petrov2025',   2,  'doctor'),
-  ('Сидорова', 'Елена',   'Павловна',    'sidorova@clinic.ru', NULL, 'Sidorova2025', 3,  'doctor'),
-  ('Кузнецов', 'Дмитрий', 'Игоревич',    'kuznetsov@clinic.ru',NULL, 'Kuznetsov2025',4,  'doctor'),
-  ('Морозова', 'Ольга',   'Викторовна',  'morozova@clinic.ru', NULL, 'Morozova2025', 5,  'doctor'),
+  ('Иванова',  'Анна',    'Сергеевна',   'ivanova@clinic.ru',  NULL, 'Ivanova214',  1,  'doctor'),
+  ('Петров',   'Михаил',  'Олегович',    'petrov@clinic.ru',   NULL, 'Petrov125',   2,  'doctor'),
+  ('Сидорова', 'Елена',   'Павловна',    'sidorova@clinic.ru', NULL, 'Sidorova859', 3,  'doctor'),
+  ('Кузнецов', 'Дмитрий', 'Игоревич',    'kuznetsov@clinic.ru',NULL, 'Kuznetsov381',4,  'doctor'),
+  ('Морозова', 'Ольга',   'Викторовна',  'morozova@clinic.ru', NULL, 'Morozova350', 5,  'doctor'),
   -- Поликлиника №2
-  ('Васильев', 'Андрей',  'Николаевич',  'vasilev@clinic.ru',  NULL, 'Vasilev2025',  6,  'doctor'),
-  ('Григорьева','Мария',  'Алексеевна',  'grigoreva@clinic.ru',NULL, 'Grigoreva2025',7,  'doctor'),
-  ('Соколов',  'Павел',   'Дмитриевич',  'sokolov@clinic.ru',  NULL, 'Sokolov2025',  8,  'doctor'),
-  ('Лебедева', 'Татьяна', 'Сергеевна',   'lebedeva@clinic.ru', NULL, 'Lebedeva2025', 9,  'doctor'),
-  ('Новиков',  'Сергей',  'Владимирович','novikov@clinic.ru',  NULL, 'Novikov2025',  10, 'doctor'),
+  ('Васильев', 'Андрей',  'Николаевич',  'vasilev@clinic.ru',  NULL, 'Vasilev328',  6,  'doctor'),
+  ('Григорьева','Мария',  'Алексеевна',  'grigoreva@clinic.ru',NULL, 'Grigoreva242',7,  'doctor'),
+  ('Соколов',  'Павел',   'Дмитриевич',  'sokolov@clinic.ru',  NULL, 'Sokolov854',  8,  'doctor'),
+  ('Лебедева', 'Татьяна', 'Сергеевна',   'lebedeva@clinic.ru', NULL, 'Lebedeva204', 9,  'doctor'),
+  ('Новиков',  'Сергей',  'Владимирович','novikov@clinic.ru',  NULL, 'Novikov792',  10, 'doctor'),
   -- Поликлиника №3
-  ('Фёдорова', 'Ирина',   'Анатольевна', 'fedorova@clinic.ru', NULL, 'Fedorova2025', 11, 'doctor'),
-  ('Михайлов', 'Виктор',  'Петрович',    'mihaylov@clinic.ru', NULL, 'Mihaylov2025', 12, 'doctor'),
-  ('Алексеева','Наталья', 'Игоревна',    'alekseeva@clinic.ru',NULL, 'Alekseeva2025',13, 'doctor'),
-  ('Захаров',  'Олег',    'Геннадьевич', 'zaharov@clinic.ru',  NULL, 'Zaharov2025',  14, 'doctor'),
-  ('Романова', 'Светлана','Юрьевна',     'romanova@clinic.ru', NULL, 'Romanova2025', 15, 'doctor');
+  ('Фёдорова', 'Ирина',   'Анатольевна', 'fedorova@clinic.ru', NULL, 'Fedorova858', 11, 'doctor'),
+  ('Михайлов', 'Виктор',  'Петрович',    'mihaylov@clinic.ru', NULL, 'Mihaylov658', 12, 'doctor'),
+  ('Алексеева','Наталья', 'Игоревна',    'alekseeva@clinic.ru',NULL, 'Alekseeva189',13, 'doctor'),
+  ('Захаров',  'Олег',    'Геннадьевич', 'zaharov@clinic.ru',  NULL, 'Zaharov704',  14, 'doctor'),
+  ('Романова', 'Светлана','Юрьевна',     'romanova@clinic.ru', NULL, 'Romanova532', 15, 'doctor');
