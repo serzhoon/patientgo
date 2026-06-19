@@ -301,39 +301,6 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: upp
   width: auto;
 }
 .btn-sort:hover { background: #e3f5f1; }
-/* Блок службы поддержки */
-.support-card {
-  max-width: 920px;
-  margin: 32px auto 0;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 24px 28px;
-}
-.support-card h3 {
-  font-size: 18px;
-  margin-bottom: 8px;
-  color: var(--accent-dark);
-}
-.support-card p {
-  color: var(--muted);
-  font-size: 14px;
-  margin-bottom: 14px;
-}
-.support-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-size: 14px;
-}
-.support-list a {
-  color: var(--accent-dark);
-  text-decoration: none;
-}
-.support-list a:hover { text-decoration: underline; }
 
 /* Подвал с копирайтом */
 .site-footer {
@@ -353,4 +320,27 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: upp
 .brand-logo {
   flex-shrink: 0;
   border-radius: 6px;
+}
+
+/* Компактный футер с контактами */
+.footer-support {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+.footer-support a {
+  color: var(--accent-dark);
+  text-decoration: none;
+}
+.footer-support a:hover { text-decoration: underline; }
+.footer-hours { color: var(--muted); }
+.footer-copy {
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 10px;
 }
