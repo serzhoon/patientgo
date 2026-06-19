@@ -507,6 +507,15 @@ function formatDate(d) {
   $('appdate').max = max.toISOString().split('T')[0];
 })();
 
+// Дата рождения: от 120 лет назад (min) до 18 лет назад (max).
+(function () {
+  const today = new Date();
+  const maxBirth = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+  const minBirth = new Date(today.getFullYear() - 120, today.getMonth(), today.getDate());
+  $('regBirthDate').min = minBirth.toISOString().split('T')[0];
+  $('regBirthDate').max = maxBirth.toISOString().split('T')[0];
+})();
+
 // ============================================================
 // Модальное окно "Забыли пароль" (демонстрационное)
 // ============================================================
