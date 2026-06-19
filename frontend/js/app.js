@@ -191,7 +191,8 @@ $('loginBtn').addEventListener('click', async () => {
       email: $('loginEmail').value.trim(),
       password: $('loginPassword').value
     });
-    currentUser = data.user;
+   currentUser = data.user;
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
     enterApp();
   } catch (e) {
     showMsg('loginMsg', e.message, false);
@@ -203,6 +204,7 @@ $('loginBtn').addEventListener('click', async () => {
 // ============================================================
 $('logoutBtn').addEventListener('click', () => {
   currentUser = null;
+  localStorage.removeItem('currentUser');
   $('appSection').classList.add('hidden');
   $('authSection').classList.remove('hidden');
   $('logoutBtn').classList.add('hidden');
@@ -620,3 +622,17 @@ function resetUiState() {
   apptSearch = '';
   apptSortNewFirst = false;
 }
+// ============================================================
+// Восстановление входа при обновлении страницы.
+// ============================================================
+(function () {
+  const saved = localStorage.getItem('currentUser');
+  if (saved) {
+    try {
+      currentUser = JSON.parse(saved);
+      enterApp();
+    } catch (e) {
+      localStorage.removeItem('currentUser');
+    }
+  }
+})();
