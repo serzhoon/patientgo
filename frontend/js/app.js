@@ -497,6 +497,17 @@ function formatDate(d) {
   return `${dd}.${mm}.${date.getFullYear()}`;
 }
 
+// Дата и время (для столбца "Записан"): ДД.ММ.ГГГГ ЧЧ:ММ
+function formatDateTime(d) {
+  if (!d) return '';
+  const date = new Date(d);
+  if (isNaN(date)) return d;
+  const dd = String(date.getDate()).padStart(2, '0');
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const hh = String(date.getHours()).padStart(2, '0');
+  const mi = String(date.getMinutes()).padStart(2, '0');
+  return `${dd}.${mm}.${date.getFullYear()} ${hh}:${mi}`;
+}
 // Минимальная дата записи — сегодня (нельзя записаться в прошлое).
 // Дата записи: от сегодня до +14 дней.
 (function () {
