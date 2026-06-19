@@ -44,7 +44,6 @@ header .brand {
   color: var(--accent-dark);
   letter-spacing: -0.2px;
 }
-header .brand span { color: var(--ink); font-weight: 400; }
 
 header nav {
   display: flex;
