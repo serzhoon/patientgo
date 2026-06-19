@@ -349,6 +349,7 @@ $('bookBtn').addEventListener('click', async () => {
 // Состояние поиска/сортировки и последний полученный список (чтобы фильтровать без перезапроса).
 let apptSearch = '';
 let apptSortNewFirst = false;
+let apptDateFilter = '';
 let apptCache = [];
 
 // Загружает записи с сервера и запоминает их, затем отрисовывает.
@@ -656,9 +657,10 @@ function resetUiState() {
   if (forgotInput) forgotInput.value = '';
   $('forgotMsg').className = 'message';
 
-  // Поиск и сортировка списка записей.
+ // Поиск, сортировка и фильтр даты списка записей.
   apptSearch = '';
   apptSortNewFirst = false;
+  apptDateFilter = '';
 }
 // ============================================================
 // Восстановление входа при обновлении страницы.
