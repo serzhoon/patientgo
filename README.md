@@ -76,34 +76,6 @@
                        │  MySQL :3306   │   база данных
                        │  clinic-mysql  │
                        └────────────────┘
-```
-
----
-
-##  Структура проекта
-
-```
-patientgo/
-├── backend/                # серверная часть (Express + MySQL)
-│   ├── src/
-│   │   ├── config/         # подключение к базе данных
-│   │   ├── controllers/    # логика обработки запросов
-│   │   ├── middleware/     # проверка пользователя и роли
-│   │   ├── routes/         # маршруты API
-│   │   └── app.js          # точка входа
-│   ├── db/schema.sql       # создание таблиц и демонстрационные данные
-│   └── Dockerfile
-├── frontend/               # клиентская часть
-│   ├── index.html
-│   ├── css/style.css
-│   ├── js/app.js
-│   ├── config.js           # адрес API
-│   ├── nginx.conf          # конфигурация веб-сервера
-│   └── Dockerfile
-├── docs/                   # документация и список аккаунтов
-├── docker-compose.yml      # запускает все три контейнера
-└── README.md
-```
 
 ---
 
