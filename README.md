@@ -109,7 +109,7 @@ docker compose down
 docker compose down -v && docker compose up --build -d
 ```
 
-
+Полная инструкция по развертыванию расположена в файле [DEPLOY.md](DEPLOY.md)
 
 ##  Данные для входа
 
